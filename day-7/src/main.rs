@@ -1,6 +1,6 @@
+use stats_utils::abs_diff;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use stats_utils::abs_diff;
 
 fn main() {
     let path = "./data/input.data";
@@ -17,7 +17,10 @@ fn main() {
         crabs_pos.sort();
         crabs_pos[crabs_pos.len() / 2]
     };
-    let fuel: usize = crabs_pos.iter().fold(0, |mut sum, &val| {sum += abs_diff(val, median); sum});
+    let fuel: usize = crabs_pos.iter().fold(0, |mut sum, &val| {
+        sum += abs_diff(val, median);
+        sum
+    });
     println!("Part 1 : Median: {}, Fuel: {}", median, fuel);
     // Part 2
     let len = crabs_pos.max();
@@ -26,9 +29,15 @@ fn main() {
 }
 
 fn total_cost(pos: &Vec<usize>, m: usize) -> usize {
-    pos.iter().fold(0, |mut sum, &v| {sum += cost(v, m); sum})
+    pos.iter().fold(0, |mut sum, &v| {
+        sum += cost(v, m);
+        sum
+    })
 }
 
 fn cost(i: usize, m: usize) -> usize {
-    (0..=abs_diff(i, m)).fold(0, |mut sum, v| {sum += v; sum})
+    (0..=abs_diff(i, m)).fold(0, |mut sum, v| {
+        sum += v;
+        sum
+    })
 }
