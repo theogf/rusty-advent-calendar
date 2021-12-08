@@ -41,7 +41,7 @@ fn main() {
         } else if p[0][1] == p[1][1] {
             // y is identical fill the row
             fill_row(&mut vents, p[0][1], p[0][0], p[1][0]);
-        } 
+        }
     }
     let danger: usize = vents.iter().filter(|v| **v > 1).count();
     println!("Danger Part 1! {}", danger);

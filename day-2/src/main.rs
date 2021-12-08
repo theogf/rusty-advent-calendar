@@ -25,7 +25,12 @@ fn main() {
     } else {
         println!("File not found")
     }
-    println!("x_pos: {}, y_pos: {}, product: {}", x_pos, y_pos, x_pos * y_pos);
+    println!(
+        "x_pos: {}, y_pos: {}, product: {}",
+        x_pos,
+        y_pos,
+        x_pos * y_pos
+    );
 
     // Part 2
     let mut aim: i32 = 0;
@@ -43,7 +48,7 @@ fn main() {
                     "forward" => {
                         x_pos = x_pos + shift;
                         y_pos = y_pos + aim * shift;
-                    },
+                    }
                     "up" => aim = aim - shift,
                     "down" => aim = aim + shift,
                     &_ => println!("Wrong argument"),
@@ -53,12 +58,18 @@ fn main() {
     } else {
         println!("File not found")
     }
-    println!("x_pos: {}, y_pos: {}, product: {}", x_pos, y_pos, x_pos * y_pos);
+    println!(
+        "x_pos: {}, y_pos: {}, product: {}",
+        x_pos,
+        y_pos,
+        x_pos * y_pos
+    );
 }
 
-
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
+where
+    P: AsRef<Path>,
+{
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
