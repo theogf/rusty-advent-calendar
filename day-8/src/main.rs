@@ -118,14 +118,12 @@ fn main() {
         let output_str: String = output_vals
             .iter()
             .map(|output| {
-                println!("Original Output {}", output);
                 let mut trans_chars: Vec<&char> = output
                     .chars()
                     .map(|c| letter_map.get(&c).unwrap())
                     .collect::<Vec<&char>>();
                 trans_chars.sort_by(|a, b| a.cmp(b));
                 let trans_output: String = String::from_iter(trans_chars);
-                println!("Translated Output {}", trans_output);
                 match &trans_output[..] {
                     ZERO => '0',
                     ONE => '1',
