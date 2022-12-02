@@ -23,21 +23,13 @@ fn main() {
         "part_2" => false,
         _ => panic!("Oh no you need"),
     };
-    if do_part_1 {
-        fn_part_1();
-    } else {
-        fn_part_2()
-    }
-}
-
-fn fn_part_1() {
     let opponent_map = HashMap::from([
         ("A", Shape::Rock),
         ("B", Shape::Paper),
         ("C", Shape::Scissors),
     ]);
     let mut opponent = Vec::<Shape>::new();
-    let mut str_players = Vec::<String>::new();
+    let mut str_player = Vec::<String>::new();
     let file_path = String::from("data/input.txt");
     // Build up the vector of values
     if let Ok(lines) = read_lines(file_path) {
@@ -48,47 +40,87 @@ fn fn_part_1() {
                     Some(val) => opponent.push(val.clone()),
                     None => panic!("{} not found", vals[0]),
                 };
-                str_players.push(String::from(vals[1]));
+                str_player.push(String::from(vals[1]));
             }
         }
     }
+    if do_part_1 {
+        fn_part_1(opponent, str_player);
+    } else {
+        fn_part_2(opponent, str_player)
+    }
+}
+
+fn fn_part_1(opponent: Vec<Shape>, str_players: Vec<String>) {
+
     let str_inputs = ["X", "Y", "Z"];
     let sh_outputs = [Shape::Rock, Shape::Paper, Shape::Scissors];
-    let mut max_score = 0;
     let perm = sh_outputs.clone();
     let perm_map = zip(str_inputs, perm).collect::<HashMap<_, _>>();
     let mut score = 0;
     for (opp, play) in zip(opponent.iter(), str_players.iter()) {
         if let Some(val) = perm_map.get(play.as_str()) {
-            score += val.score(*opp);
+            score += val.score(*opp) + val.val();
         }
     }
-    if score > max_score {
-        max_score = score;
-    }
-    println!("{:?}", max_score);
+    println!("{:?}", score);
 }
 
-fn fn_part_2() {}
+fn fn_part_2(opponent: Vec<Shape>, str_players: Vec<String>) {
+    let mut score = 0;
+    for (opp, play) in zip(opponent.iter(), str_players.iter()) {
+        let val = match play.as_str() {
+            // Need to lose
+            "X" => {
+                match opp {
+                    Shape::Rock => Shape::Scissors.val(),
+                    Shape::Paper => Shape::Rock.val(),
+                    Shape::Scissors => Shape::Paper.val(),
+                }
+            },
+            // Need to draw
+            "Y" => 3 + opp.val(),
+            // Need to win
+            "Z" => {
+                let val = match opp {
+                    Shape::Rock => Shape::Paper.val(),
+                    Shape::Paper => Shape::Scissors.val(),
+                    Shape::Scissors => Shape::Rock.val(),
+                };
+                val + 6
+            },
+            _ => panic!(),
+        };
+        score += val;
+    }
+    println!("{}", score);
+}
 
 impl Shape {
     fn score(&self, x: Shape) -> u32 {
         match self {
             Shape::Rock => match x {
-                Shape::Rock => 3 + 1,
-                Shape::Paper => 0 + 1,
-                Shape::Scissors => 6 + 1,
+                Shape::Rock => 3,
+                Shape::Paper => 0,
+                Shape::Scissors => 6,
             },
             Shape::Paper => match x {
-                Shape::Rock => 6 + 2,
-                Shape::Paper => 3 + 2,
-                Shape::Scissors => 0 + 2,
+                Shape::Rock => 6,
+                Shape::Paper => 3,
+                Shape::Scissors => 0,
             },
             Shape::Scissors => match x {
-                Shape::Rock => 0 + 3,
-                Shape::Paper => 6 + 3,
-                Shape::Scissors => 3 + 3,
+                Shape::Rock => 0,
+                Shape::Paper => 6,
+                Shape::Scissors => 3,
             },
+        }
+    }
+    fn val(&self) -> u32{
+        match self {
+            Shape::Rock => 1,
+            Shape::Paper => 2,
+            Shape::Scissors => 3,
         }
     }
 }
