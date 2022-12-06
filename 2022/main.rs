@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 use std::env;
-use range_ext::intersect::Intersect;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -11,6 +10,7 @@ fn main() {
         Some(s) => s,
         None => "input",
     });
+    println!("{}", &query);
     let do_part_1 = match query.as_str() {
         "part_1" => true,
         "part_2" => false,
@@ -25,44 +25,22 @@ fn main() {
 }
 
 fn fn_part_1(file_path: String) {
-    let mut count = 0;
     if let Ok(lines) = read_lines(file_path) {
         for line in lines {
             if let Ok(ip) = line {
-                let vals = ip.split(',').
-                map(|s| s.split('-').
-                                map(|ss| ss.parse::<u32>().expect("noooooo")).collect::<Vec<u32>>()
-                    ).collect::<Vec<Vec<u32>>>();
-                if (vals[0][0] <= vals[1][0] && vals[0][1] >= vals[1][1]) || (vals[0][0] >= vals[1][0] && vals[0][1] <= vals[1][1])
-                {
-                    count += 1;
-                }
             }
         }
     }
-    println!("{}", count)
+    println!("{}", max)
 }
 
 fn fn_part_2(file_path: String) {
-    let mut count = 0;
     if let Ok(lines) = read_lines(file_path) {
         for line in lines {
             if let Ok(ip) = line {
-                let vals = ip.split(',').
-                map(|s| s.split('-').
-                                map(|ss| ss.parse::<u32>().expect("noooooo")).collect::<Vec<u32>>()
-                    ).collect::<Vec<Vec<u32>>>();
-                let a = vals[0][0]..vals[0][1]+1;
-                let b = vals[1][0]..vals[1][1]+1;
-                if a.intersect(&b).is_any() 
-                {
-                    dbg!(vals);
-                    count += 1;
-                }
             }
         }
     }
-    println!("{}", count);
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
